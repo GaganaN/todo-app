@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App JavaScript</title>
+    <style>
+      *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+body{
+    height: 100vh;
+    width: 100%;
+    background: whitesmoke;
+}
+.wrap h2{
+    font-size: 20px;
+    font-weight: 500;
+}
+.wrap{
+    margin: 150px auto;
+    max-width: 500px;
+    width: 100%;
+    background: gray;
+    padding: 30px;
+    border-radius: 5px;
+}
+.wrap .inputField{
+    display: flex;
+    height: 45px;
+    width: 100%;
+    margin: 20px 0;
+}
+.inputField input{
+    outline: none;
+    width: 70%;
+    height: 100%;
+    border: 1px solid black;
+    font-size: 16px;
+    border-radius: 2px;
+    padding-left: 10px;
+}
+.inputField button{
+    width: 50px;
+    height: 100%;
+    border: 2px;
+    outline: 1px;
+    background: rgb(39, 236, 13);
+    color: black;
+    font-size: 18px;
+    border-radius: 2px;
+    margin-left: 4px;
+    opacity: 0.6;
+    cursor: pointer;
+    pointer-events: none;
+}
+.inputField button.active{
+    opacity: 1;
+    pointer-events: auto;
+}
+.wrap .list{
+    max-height: 250px;
+    overflow-y: auto;
+}
+.list li{
+    list-style: none;
+    height: 45px;
+    line-height: 45px;
+    position: relative;
+    background: white;
+    border-radius: 2px;
+    margin-bottom: 6px;
+    padding: 0 15px;
+    cursor: default;
+}
+.list li span{
+    position: absolute;
+    right: 0px;
+    color: brown;
+    cursor: pointer;  
+}
+.list li:hover span{
+    right: 0px;
+}
+.wrap .footer{
+    display: flex;
+    width: 100%;
+    margin-top: 200px;
+    align-items: center;
+    justify-content: space-between;
+}
+.footer button{
+    border: none;
+    outline: none;
+    background: brown;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    padding: 6px 10px;
+    align-items: center;
+}
+    </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>Todo App</h2>
+    <div class="inputField">
+      <input type="text" placeholder="Add your new todo">
+      <button><i class="fas fa-plus">+</i></button>
+    </div>
+    <ul class="list">
+        <li> Wake up at 6am <span><i class="fas fa-trash">delete</i></span></li>
+        <li> Yoga and meditation for 2hrs <span><i class="fas fa-trash">delete</i></span></li>
+        <li> Tiffen <span><i class="fas fa-trash">delete</i></span></li>
+        <li> Calassical dance practice<span><i class="fas fa-trash">delete</i></span></li>
+        <li> react and js practice <span><i class="fas fa-trash">delete</i></span></li>
+    </ul>
+    <div class="footer">
+      <button>Clear list</button>
+    </div>
+  </div>
+</body>
+<script>
+    const inputBox = document.querySelector(".inputField input");
+    const addBtn = document.querySelector(".inputField button");
+    const todoList = document.querySelector(".list");
+    const deleteAllBtn = document.querySelector(".footer button");
+
+    inputBox.onkeyup = () => {
+        let userData = inputBox.value;
+        if(userData.trim() != 0){
+            addBtn.classList.add("active");
+        }else{
+            addBtn.classList.remove("active");
+        }
+    }
+    showTask();
+
+    addBtn.onclick = () => {
+        let userData = inputBox.value;
+        let getLocalStorage = localStorage.getItem("New todo work");
+        if(getLocalStorage == null){
+            listArra = [];
+        }else{
+            listArra = JSON.parse(getLocalStorage);
+        }
+        listArra.push(userData);
+        localStorage.setItem("New todo work", JSON.stringify(listArra));
+        showTask();
+        addBtn.classList.remove("active");
+    }
+
+    //add todo list function
+    function showTask() {
+        let getLocalStorage = localStorage.getItem("New todo");
+        if(getLocalStorage == null){
+            listArra = [];
+        }else{
+            listArra = JSON.parse(getLocalStorage);
+        }
+        let newLiTag = '';
+        listArra.forEach((element) => {
+            newLiTag += `<li> ${element} <span onclick="deleteTask(${index});"><i class="fas fa-trash">delete</i></span></li>`;
+        });
+        todoList.innerHTML = newLiTag;
+        inputBox.value = "";
+    }
+
+    //delete task from list
+    function deleteTask(index){
+        let getLocalStorage =localStorage.getItem("New todo work");
+        listArra = JSON.parse(getLocalStorage);
+        liatArra.splice(index, 1);
+        localStorage.setItem("New todo work", JSON.stringify(listArra));
+        showTask();
+    }
+
+    //clear the todo list
+    deleteAllBtn.onclick = () => {
+        listArra = [];
+        localStorage.setItem("New todo work", JSON.stringify(listArra));
+        showTask();
+    }
+
+</script>
+</html>
